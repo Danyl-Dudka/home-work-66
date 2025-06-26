@@ -25,16 +25,15 @@ app.get("/getUsers", async (req, res) => {
   }
 }); // CURSOR
 
-app.get("/average_age", async (req, res) => {
+app.get("/unique_position", async (req, res) => {
   try {
     await client.connect();
     const myDB = client.db(dbName);
     const users = myDB.collection("usersCollection");
     const result = await users
       .aggregate([
-        { $addFields: { ageNumeric: { $toInt: '$age' } } },
-        { $group: { _id: "$position", averageAge: { $avg: "$ageNumeric" } } },
-        { $sort: { averageAge: 1 } },
+        { $group: { _id: null, uniquePosition: { $addToSet: "$position" } } },
+        { $project: { _id: 0, count: { $size: "$uniquePosition" } } },
       ])
       .toArray();
     res.send(result);

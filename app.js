@@ -25,7 +25,7 @@ app.get("/getUsers", async (req, res) => {
   }
 }); // CURSOR
 
-app.get("/unique_position", async (req, res) => {
+app.get("/uniquePosition", async (req, res) => {
   try {
     await client.connect();
     const myDB = client.db(dbName);
